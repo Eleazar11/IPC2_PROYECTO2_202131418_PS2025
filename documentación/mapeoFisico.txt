@@ -1,0 +1,132 @@
+-- Crear la base de datos
+CREATE DATABASE IF NOT EXISTS batibelleza;
+
+-- Usar la base de datos recién creada
+USE batibelleza;
+
+-- Tabla para los usuarios (Clientes, Empleados, Marketing, Administrador)
+CREATE TABLE usuarios (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    dpi VARCHAR(20) NOT NULL,
+    telefono VARCHAR(15),
+    direccion TEXT,
+    correo VARCHAR(255) NOT NULL UNIQUE,
+    contrasena VARCHAR(255) NOT NULL,
+    foto_perfil VARCHAR(255),
+    descripcion TEXT,
+    tipo_usuario ENUM('cliente', 'empleado', 'marketing', 'administrador') NOT NULL,
+    estado ENUM('activo', 'inactivo') DEFAULT 'activo',
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabla para los servicios
+CREATE TABLE servicios (
+    id_servicio INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    descripcion TEXT,
+    tiempo INT NOT NULL, -- tiempo en minutos
+    precio DECIMAL(10, 2) NOT NULL,
+    catalogo_pdf VARCHAR(255),
+    estado ENUM('activo', 'inactivo') DEFAULT 'activo',
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabla para los anuncios (Marketing)
+CREATE TABLE anuncios (
+    id_anuncio INT AUTO_INCREMENT PRIMARY KEY,
+    tipo ENUM('texto', 'imagen', 'video') NOT NULL,
+    contenido TEXT NOT NULL,
+    fecha_inicio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_fin TIMESTAMP,
+    url_video VARCHAR(255),
+    estado ENUM('activo', 'inactivo') DEFAULT 'activo'
+);
+
+-- Tabla para las citas/reservas
+CREATE TABLE citas (
+    id_cita INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL, -- Cliente
+    id_servicio INT NOT NULL,
+    id_empleado INT NOT NULL, -- Empleado
+    fecha DATE NOT NULL,
+    hora TIME NOT NULL,
+    estado ENUM('pendiente', 'atendida', 'cancelada') DEFAULT 'pendiente',
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_servicio) REFERENCES servicios(id_servicio),
+    FOREIGN KEY (id_empleado) REFERENCES usuarios(id_usuario)
+);
+
+-- Tabla para los horarios de los empleados
+CREATE TABLE horarios_empleados (
+    id_horario INT AUTO_INCREMENT PRIMARY KEY,
+    id_empleado INT NOT NULL,
+    dia_semana ENUM('lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo') NOT NULL,
+    hora_inicio TIME NOT NULL,
+    hora_fin TIME NOT NULL,
+    FOREIGN KEY (id_empleado) REFERENCES usuarios(id_usuario)
+);
+
+-- Tabla para los anuncios vistos por los clientes
+CREATE TABLE anuncios_vistos (
+    id_anuncio INT NOT NULL,
+    id_usuario INT NOT NULL,
+    fecha_visto TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_anuncio) REFERENCES anuncios(id_anuncio),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+    PRIMARY KEY (id_anuncio, id_usuario)
+);
+
+-- Tabla para los reportes de ingresos por servicio
+CREATE TABLE ingresos_servicios (
+    id_ingreso INT AUTO_INCREMENT PRIMARY KEY,
+    id_servicio INT NOT NULL,
+    total_ingresos DECIMAL(10, 2) NOT NULL,
+    fecha_inicio DATE NOT NULL,
+    fecha_fin DATE NOT NULL,
+    FOREIGN KEY (id_servicio) REFERENCES servicios(id_servicio)
+);
+
+-- Tabla para los reportes de ingresos por empleado
+CREATE TABLE ingresos_empleados (
+    id_ingreso INT AUTO_INCREMENT PRIMARY KEY,
+    id_empleado INT NOT NULL,
+    total_ingresos DECIMAL(10, 2) NOT NULL,
+    fecha_inicio DATE NOT NULL,
+    fecha_fin DATE NOT NULL,
+    FOREIGN KEY (id_empleado) REFERENCES usuarios(id_usuario)
+);
+
+-- Tabla para registrar las facturas generadas por las citas
+CREATE TABLE facturas (
+    id_factura INT AUTO_INCREMENT PRIMARY KEY,
+    id_cita INT NOT NULL,
+    total DECIMAL(10, 2) NOT NULL,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_cita) REFERENCES citas(id_cita)
+);
+
+-- Tabla para registrar clientes en la lista negra (clientes con mal comportamiento)
+CREATE TABLE lista_negra (
+    id_cliente INT NOT NULL,
+    fecha_agregado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    motivo TEXT,
+    FOREIGN KEY (id_cliente) REFERENCES usuarios(id_usuario),
+    PRIMARY KEY (id_cliente)
+);
+
+-- Tabla para los anuncios que serán mostrados en el sistema
+CREATE TABLE anuncios_mostrados (
+    id_anuncio INT NOT NULL,
+    fecha_mostrado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_anuncio) REFERENCES anuncios(id_anuncio),
+    PRIMARY KEY (id_anuncio, fecha_mostrado)
+);
+
+-- Tabla para los anuncios pagados
+CREATE TABLE pagos_anuncios (
+    id_pago INT AUTO_INCREMENT PRIMARY KEY,
+    id_anuncio INT NOT NULL,
+    cantidad DECIMAL(10, 2) NOT NULL,
+    fecha_pago TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_anuncio) REFERENCES anuncios(id_anuncio)
+);
