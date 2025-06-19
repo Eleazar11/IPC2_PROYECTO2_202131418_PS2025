@@ -38,7 +38,21 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     
+    <!-- Configuración de Jersey (JAX-RS) -->
+    <servlet>
+        <servlet-name>jersey-servlet</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>com.mycompany.batibellezaapi.controladores</param-value> <!-- AJUSTA ESTE PAQUETE -->
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
 
+    <servlet-mapping>
+        <servlet-name>jersey-servlet</servlet-name>
+        <url-pattern>/app/*</url-pattern>
+    </servlet-mapping>
 
     
 </web-app>

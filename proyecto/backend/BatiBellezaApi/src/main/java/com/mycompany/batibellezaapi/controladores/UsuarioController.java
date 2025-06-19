@@ -25,7 +25,7 @@ import java.util.Map;
 public class UsuarioController {
 
     private UsuarioService usuarioService;
-    private static final String SECRET_KEY = "clave_usr_revistas_online"; // Cambia esto a algo seguro
+    private static final String SECRET_KEY = "clave_usr_bati_belleza"; // Cambia esto a algo seguro
 
     // Constructor del controlador
     public UsuarioController() {
