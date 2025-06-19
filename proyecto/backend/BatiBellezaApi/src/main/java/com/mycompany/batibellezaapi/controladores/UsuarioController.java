@@ -50,7 +50,8 @@ public class UsuarioController {
         }
         // Validación de datos
         if (usuario.getDpi() == null || usuario.getDpi().isEmpty()
-                || usuario.getContrasena() == null || usuario.getContrasena().isEmpty()
+                || usuario.getContrasena() == null 
+                || usuario.getContrasena().isEmpty()
                 || usuario.getRol() == null) {
             Map<String, String> response = new HashMap<>();
             response.put("error", "Todos los campos son obligatorios");

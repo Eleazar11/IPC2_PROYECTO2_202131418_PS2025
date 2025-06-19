@@ -14,6 +14,10 @@ public class Usuario {
     private String contrasena;
     private Rol rol;
 
+    public Usuario() {
+    }
+
+    
 
     public Usuario(String dpi, String correo, String contrasena, Rol rol) {
         this.dpi = dpi;
