@@ -1,1 +1,87 @@
-<p>registro works!</p>
+<section class="vh-100" style="background-color: #f4f6f9;">
+  <div class="container h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-lg-12 col-xl-11">
+        <div class="card text-black" style="border-radius: 25px;">
+          <div class="card-body p-md-5">
+            <div class="row justify-content-center">
+              <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+
+                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Registro de Usuario</p>
+
+                <form (ngSubmit)="onRegister(usuarioForm)" #usuarioForm="ngForm" class="mx-1 mx-md-4">
+
+                  <!-- DPI de Usuario -->
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <label class="form-label" for="nombre">DPI</label>
+                      <input type="text" id="dpi" name="nombreUsuario" ngModel class="form-control" required
+                        #nombre="ngModel">
+                      <div *ngIf="nombre.invalid && nombre.touched" class="error">
+                        El nombre es requerido.
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Correo Electrónico -->
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <label class="form-label" for="correo">Correo Electrónico</label>
+                      <input type="email" id="correo" name="correo" ngModel class="form-control" required
+                        #correo="ngModel">
+                      <div *ngIf="correo.invalid && correo.touched" class="error">
+                        El correo es requerido y debe ser válido.
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Contraseña -->
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <label class="form-label" for="contrasena">Contraseña</label>
+                      <input type="password" id="contrasena" name="contrasena" ngModel class="form-control" required
+                        #contrasena="ngModel">
+                      <div *ngIf="contrasena.invalid && contrasena.touched" class="error">
+                        La contraseña es requerida.
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Tipo de Usuario -->
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-user-tag fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <label class="form-label" for="tipoUsuario">Tipo de Usuario</label>
+                      <select id="tipoUsuario" name="tipoUsuario" ngModel class="form-control" required
+                        #tipoUsuario="ngModel">
+                        <option value="CLIENTE">Cliente</option>
+                      </select>
+
+                      <div *ngIf="tipoUsuario.invalid && tipoUsuario.touched" class="error">
+                        El tipo de usuario es requerido.
+                      </div>
+                    </div>
+                  </div>
+
+
+
+                  <!-- Botón de Registro -->
+                  <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                    <button type="submit" class="btn btn-primary btn-lg" [disabled]="usuarioForm.invalid"
+                      (click)="mostrarMensaje()">Registrar</button>
+                  </div>
+                </form>
+
+                <!-- Mensaje de Prueba -->
+                <div *ngIf="mensaje" class="alert alert-info">{{ mensaje }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
