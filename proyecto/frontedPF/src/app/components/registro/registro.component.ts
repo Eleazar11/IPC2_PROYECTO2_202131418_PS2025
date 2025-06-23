@@ -71,5 +71,7 @@ export class RegistroComponent {
     }
   }
 
-
+navigateTo(arg0: string) {
+  this.router.navigate([arg0]);
+}
 }

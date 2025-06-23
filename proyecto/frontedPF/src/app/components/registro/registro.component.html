@@ -77,6 +77,13 @@
 
                 <!-- Mensaje de Prueba -->
                 <div *ngIf="mensaje" class="alert alert-info">{{ mensaje }}</div>
+                <div class="text-center mt-3">
+                  <button type="button" (click)="navigateTo('/home')" class="btn btn-outline-secondary btn-lg">
+                    <i class="fas fa-house me-2"></i> Volver al Inicio
+                  </button>
+                </div>
+
+
               </div>
             </div>
           </div>
