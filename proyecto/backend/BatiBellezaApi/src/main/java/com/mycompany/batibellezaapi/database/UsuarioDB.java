@@ -58,7 +58,7 @@ public class UsuarioDB {
         }
     }
 
-    // Método para registrar cartera digital si el usuario es de tipo 'especial'
+//    // Método para registrar cartera digital si el usuario es de tipo 'especial'
 //    private void registrarCarteraDigital(String nombreUsuario) {
 //        String consultaCartera = "INSERT INTO carteras_digitales (nombre_usuario, saldo, fecha_creacion) VALUES (?, 0.00, CURRENT_DATE)";
 //        try (PreparedStatement statementCartera = connection.prepareStatement(consultaCartera)) {
@@ -69,7 +69,7 @@ public class UsuarioDB {
 //        }
 //    }
 
-    // Método para verificar si el usuario ya existe en la base de datos
+     //Método para verificar si el usuario ya existe en la base de datos
     private boolean existeUsuario(String dpi) {
         String consulta = "SELECT COUNT(*) FROM usuarios WHERE dpi = ?";
         try (PreparedStatement statement = connection.prepareStatement(consulta)) {
@@ -87,48 +87,50 @@ public class UsuarioDB {
     }
 
     // Método para autenticar usuario
-//    public Usuario iniciarSesion(String nombreUsuario, String contrasena) {
-//        Seguridad seguridad = new Seguridad();
-//        Usuario usuarioObtenido = obtenerUsuario(nombreUsuario);
-//
-//        if (usuarioObtenido == null) {
-//            return null;
-//        }
-//        // Si la contraseña coincide con el hash almacenado, devuelve un objeto Usuario
-//        if (seguridad.verificarContrasena(contrasena, usuarioObtenido.getContrasena())) {
-//            System.out.println("Contraseña correcta");
-//            return usuarioObtenido;
-//        }
-//
-//        // Si no se encontró un usuario con las credenciales dadas, devuelve null
-//        return null;
-//    }
-//    
-//    // Método para obtener un usuario por nombre de usuario
-//    public Usuario obtenerUsuario(String nombreUsuario) {
-//        String consulta = "SELECT * FROM usuarios WHERE dpi = ?";
-//        try (PreparedStatement statement = connection.prepareStatement(consulta)) {
-//            statement.setString(1, nombreUsuario);
-//            try (ResultSet resultSet = statement.executeQuery()) {
-//                if (resultSet.next()) {
-//                    String dpi = resultSet.getString("dpi");
-//                    String correo = resultSet.getString("correo");
-//                    String contrasena = resultSet.getString("contrasena");
-//                    String rol = resultSet.getString("tipo_usuario");
-//                    
-//
-//                    // Construcción del usuario
-//                    Usuario usuario = new Usuario(
-//                            dpi, correo, contrasena, Rol.valueOf(rol)
-//                    );
-//                    return usuario;
-//                }
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException("Error al obtener el usuario", e);
-//        }
-//        return null;
-//    }
+    public Usuario iniciarSesion(String nombreUsuario, String contrasena) {
+        Seguridad seguridad = new Seguridad();
+        Usuario usuarioObtenido = obtenerUsuario(nombreUsuario);
+
+        if (usuarioObtenido == null) {
+            return null;
+        }
+        // Si la contraseña coincide con el hash almacenado, devuelve un objeto Usuario
+        if (seguridad.verificarContrasena(contrasena, usuarioObtenido.getContrasena())) {
+            System.out.println("Contraseña correcta");
+            return usuarioObtenido;
+        }
+
+        // Si no se encontró un usuario con las credenciales dadas, devuelve null
+        return null;
+    }
+    
+    // Método para obtener un usuario por nombre de usuario
+    public Usuario obtenerUsuario(String nombreUsuario) {
+        String consulta = "SELECT * FROM usuarios WHERE dpi = ?";
+        try (PreparedStatement statement = connection.prepareStatement(consulta)) {
+            statement.setString(1, nombreUsuario);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    String dpi = resultSet.getString("dpi");
+                    String correo = resultSet.getString("correo");
+                    String contrasena = resultSet.getString("contrasena");
+                    String rol = resultSet.getString("tipo_usuario");
+                    
+
+                    // Construcción del usuario
+                    Usuario usuario = new Usuario(
+                            
+                            dpi, correo, contrasena, Rol.valueOf(rol.toUpperCase())
+                    );
+                    System.out.println("Rol recibido de la BD: '" + rol+ dpi+ contrasena + "'");
+                    return usuario;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener el usuario", e);
+        }
+        return null;
+    }
 //    // Método para actualizar el perfil de un usuario
 //    public void actualizarUsuario(String nombreUsuario, String descripcion, String fotoPerfilPath) {
 //        String consulta = "UPDATE usuarios SET descripcion = ?, foto_perfil = ? WHERE nombre = ?";
